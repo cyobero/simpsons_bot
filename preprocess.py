@@ -15,8 +15,17 @@ def preprocess(file_path):
     lines = open(file_path, 'r').read().lower().strip().split('<p>')
     lines = [unicode_to_ascii(line) for line in lines]
     lines = [lines[i].replace('</p>', '') for i in range(len(lines))]
-    lines = ['<START>' + lines[i] + '<END>' for i in range(len(lines))]
-    return lines
+
+    # Create space between words and punctuations after it.
+    # EX: "he is a boy !" ----> "he is a boy !"
+    lines = [re.sub(r"([?.!,¿])", r" \1 ", line) for line in lines]
+    lines = [re.sub(r'[" "]+', " ", line) for line in lines]
+
+    # Replace everything with spaces except (a-Z, A-Z, "?", "!", ".", ",")
+    lines = [re.sub(r"[^a-zA-Z?.!,¿]+", " ", line) for line in lines]
+
+    lines = ['<start>' + lines[i] + '<end>' for i in range(len(lines))]
+    return lines[1: ]
 
 
 def create_dataset(file_path):
