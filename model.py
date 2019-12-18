@@ -42,7 +42,7 @@ class BahdanauAttention(tf.keras.layers.Layer):
         super(BahdanauAttention, self).__init__()
         self.W1 = tf.keras.layers.Dense(units)
         self.W2 = tf.keras.layers.Dense(units)
-        self.V = tf.keras.layers.Dense()
+        self.V = tf.keras.layers.Dense(1)
 
 
     def call(self, query, values):
