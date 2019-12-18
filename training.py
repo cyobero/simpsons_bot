@@ -11,7 +11,7 @@ from model import *
 optimizer = tf.keras.optimizers.Adam()
 
 loss_object = tf.keras.losses.SparseCategoricalCrossEntropy(
-    from_logits=True, reduction='None')
+    from_logits=True, reduction='none')
 
 def loss_function(real, pred):
     mask = tf.math.logical_not(tf.math.equal(real, 0))
@@ -55,7 +55,7 @@ def train_step(inp, output, enc_hidden):
         batch_loss = (loss / int(output.shape[1]))
         variables = encoder.trainable_variables + decoder.trainable_variables
         gradients = tape.gradient(loss, variables)
-        optimizer.apply(zip(gradients, variables))
+        optimizer.apply_gradients(zip(gradients, variables))
 
         return batch_loss
 

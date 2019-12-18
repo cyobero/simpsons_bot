@@ -82,6 +82,10 @@ class Decoder(tf.keras.Model):
             return_sequences=True,
             return_state=True,
             recurrent_initializer='glorot_uniform')
+        self.fc = tf.keras.layers.Dense(vocab_size)
+
+        # used for attention
+        self.attention = BahdanauAttention(self.dec_units)
 
 
     def call(self, x, hidden, enc_output):

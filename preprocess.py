@@ -1,5 +1,6 @@
 """Preprocess data and build input pipeline."""
 import unicodedata
+import re
 import tensorflow as tf
 
 FILE_PATH = "/Users/czar.yobero/datacsience/datasets/simpsons_scripts.txt"
