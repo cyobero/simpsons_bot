@@ -47,6 +47,7 @@ def tokenize(line):
     return tensor, line_tokenizer
 
 
+
 def load_dataset(file_path):
     """Loads preprocessed dataset."""
     answer, question = create_dataset(file_path)

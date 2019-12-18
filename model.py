@@ -4,6 +4,8 @@
     3. Attention
 """
 import tensorflow as tf
+from preprocess import max_length, load_dataset, FILE_PATH
+from sklearn.model_selection import train_test_split
 
 class Encoder(tf.keras.Model):
     """Encoder Layer
@@ -102,3 +104,36 @@ class Decoder(tf.keras.Model):
         x = self.fc(output)
 
         return x, state, attention_weights
+
+
+input_tensor, output_tensor, input_line, output_line = load_dataset(FILE_PATH)
+
+# Calculate max length of target tensors
+max_length_output, max_length_input = max_length(output_tensor), max_length(input_tensor)
+
+# Create trainining/test set with 80-20 split
+input_tensor_train, input_tensor_test, output_tensor_train, output_tensor_test = train_test_split(input_tensor, output_tensor, test_size=0.2)
+
+# Create tf.data Dataset. Start by creating hyperparameters.
+BUFFER_SIZE = len(input_tensor_train)
+BATCH_SIZE = 64
+STEPS_PER_EPOCH = len(input_tensor_train) // BATCH_SIZE
+EMBEDDING_DIM = 256
+UNITS = 1024
+VOCAB_INPUT_SIZE = len(input_line.word_index) + 1
+VOCAB_OUTPUT_SIZE = len(output_line.word_index) + 1
+
+dataset = tf.data.Dataset.from_tensor_slices((input_tensor_train, output_tensor_train)).shuffle(BUFFER_SIZE)
+dataset = dataset.batch(BATCH_SIZE, drop_remainder=True)
+
+encoder = Encoder(VOCAB_INPUT_SIZE,
+                  EMBEDDING_DIM,
+                  UNITS,
+                  BATCH_SIZE)
+
+decoder = Decoder(VOCAB_OUTPUT_SIZE,
+                  EMBEDDING_DIM,
+                  UNITS,
+                  BATCH_SIZE)
+
+attention_layer = BahdanauAttention(10)

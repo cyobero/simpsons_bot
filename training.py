@@ -1,15 +1,9 @@
-"""Train Transformer model with customized loss function
+"""Train Transformer model with customized loss function.
+First, create tf.data Dataset with hyperparams.
 """
 import tensorflow as tf
 import os
-from .model import Encoder, Decoder, BahdanauAttention
-
-encoder = Encoder(vocab_inp_size,
-                  embedding_dim,
-                  units,
-                  BATCH_SIZE)
-
-attention_layer = BahdanauAttention(10)
+from model import encoder, decoder
 
 optimizer = tf.keras.optimizers.Adam()
 
@@ -33,5 +27,4 @@ checkpoint = tf.train.Checkpoint(optimizer=optimizer,
                                  encoder=encoder,
                                  decoder=decoder)
 
-
-
+EPOCHS = 20
