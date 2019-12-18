@@ -4,8 +4,8 @@
     3. Attention
 """
 import tensorflow as tf
-from preprocess import max_length, load_dataset, FILE_PATH
 from sklearn.model_selection import train_test_split
+from preprocess import max_length, load_dataset, FILE_PATH
 
 class Encoder(tf.keras.Model):
     """Encoder Layer
@@ -26,7 +26,7 @@ class Encoder(tf.keras.Model):
 
     def call(self, x, hidden):
         x = self.embedding(x)
-        output, state = self.gru(x, initial_state = hidden)
+        output, state = self.gru(x, initial_state=hidden)
         return output, state
 
 
