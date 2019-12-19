@@ -3,7 +3,7 @@ import unicodedata
 import re
 import tensorflow as tf
 
-FILE_PATH = "/Users/czar.yobero/datacsience/datasets/simpsons_scripts.txt"
+FILE_PATH = "./simpsons_scripts_3.txt"
 
 def unicode_to_ascii(text):
     """Converts string to ASCII."""
@@ -51,9 +51,14 @@ def tokenize(line):
         filters='')
     line_tokenizer.fit_on_texts(line)
 
-    tensor = line_tokenizer.texts_to_sequence(line)
+    tensor = line_tokenizer.texts_to_sequences(line)
     tensor = tf.keras.preprocessing.sequence.pad_sequences(
         tensor, padding='post')
+
+    # Ensure that we return a nonzero tensor to reduce dimensionality and
+    # improve performance. 
+    tensor = tensor[tensor.nonzero()]
+    tensor.resize((len(tensor), 11), refcheck=False)
     return tensor, line_tokenizer
 
 
